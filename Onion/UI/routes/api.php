@@ -1,8 +1,10 @@
 <?php
 use Illuminate\Support\Facades\Route;
 
-
-Route::post('/create', 'ItemController@create');
-
-//Route::middleware('auth:sanctum')->group(function () {
-//});
+// Product
+Route::prefix('product')->group(function () {
+    // CRUD
+    Route::post('/create', 'ProductController@create');
+    Route::post('/update/{product}', 'ProductController@update');
+    Route::post('/delete/{product}', 'ProductController@delete');
+});

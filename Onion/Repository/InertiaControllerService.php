@@ -9,21 +9,37 @@ use Closure;
 use Illuminate\Support\Facades\DB;
 use Onion\Services\ServiceInterface;
 
-abstract class InertiaControllerService implements ControllerServiceInterface
+class InertiaControllerService implements ControllerServiceInterface
 {
+    /**
+     * @var Object Model
+     */
     protected $modelClass;
 
+    /**
+     * @var ServiceInterface
+     */
     protected $serviceInterface;
 
+    /**
+     * InertiaControllerService constructor.
+     * @param ServiceInterface $serviceInterface
+     */
     public function __construct(ServiceInterface $serviceInterface)
     {
         $this->serviceInterface = $serviceInterface;
     }
 
+    /**
+     * @param Request $request
+     * @param $model
+     * @param Closure|null $createMethod
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function doCreate(Request $request, $model, ?Closure $createMethod = null)
     {
         try {
-            $this->modelClass = get_class($model);
+            $this->modelClass = new $model;
 
             DB::beginTransaction();
 
@@ -48,6 +64,12 @@ abstract class InertiaControllerService implements ControllerServiceInterface
         }
     }
 
+    /**
+     * @param Request $request
+     * @param $model
+     * @param Closure|null $updateMethod
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function doUpdate(Request $request, $model, ?Closure $updateMethod = null)
     {
         try {
@@ -74,6 +96,11 @@ abstract class InertiaControllerService implements ControllerServiceInterface
         }
     }
 
+    /**
+     * @param $model
+     * @param Closure|null $deleteMethod
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function doDelete($model, ?Closure $deleteMethod = null)
     {
         try {

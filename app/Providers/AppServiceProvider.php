@@ -5,8 +5,9 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Onion\Repository\ControllerServiceInterface;
 use Onion\Repository\InertiaControllerService;
+use Onion\Services\InertiaService;
 use Onion\Services\ServiceInterface;
-use Onion\UI\Services\InertiaService;
+use Onion\UI\Controllers\ProductController;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -27,7 +28,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->app->bind(ControllerServiceInterface::class, InertiaControllerService::class);
+        $this->app->when(ProductController::class)
+            ->needs(ControllerServiceInterface::class)
+            ->give(InertiaControllerService::class);
         $this->app->bind(ServiceInterface::class, InertiaService::class);
     }
 }
